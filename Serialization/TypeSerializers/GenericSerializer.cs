@@ -8,24 +8,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
 
-namespace NetSerializer
+namespace Orckestra.Serialization.TypeSerializers
 {
 	sealed class GenericSerializer : IDynamicTypeSerializer
 	{
 		public bool Handles(Type type)
 		{
-			if (!type.IsSerializable)
-				throw new NotSupportedException(String.Format("Type {0} is not marked as Serializable", type.FullName));
-
-			if (typeof(System.Runtime.Serialization.ISerializable).IsAssignableFrom(type))
-				throw new NotSupportedException(String.Format("Cannot serialize {0}: ISerializable not supported", type.FullName));
+		    type.ValidateIfSerializable();
 
 			return true;
 		}
@@ -33,7 +25,7 @@ namespace NetSerializer
 		public IEnumerable<Type> GetSubtypes(Type type)
 		{
 			var fields = Helpers.GetFieldInfos(type);
-
+            
 			foreach (var field in fields)
 				yield return field.FieldType;
 		}

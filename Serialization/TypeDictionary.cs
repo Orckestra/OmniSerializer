@@ -12,7 +12,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
-namespace NetSerializer
+namespace Orckestra.Serialization
 {
 	/// <summary>
 	/// Threadsafe Type -> T dictionary, which supports lockless reading.

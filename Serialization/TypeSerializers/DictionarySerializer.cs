@@ -12,9 +12,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
-namespace NetSerializer
+namespace Orckestra.Serialization.TypeSerializers
 {
 	sealed class DictionarySerializer : IStaticTypeSerializer
 	{
@@ -154,7 +153,7 @@ namespace NetSerializer
 			foreach (var kvp in value)
 				kvpArray[i++] = kvp;
 
-			serializer.Serialize(stream, kvpArray);
+			serializer.SerializeImpl(stream, kvpArray);
 		}
 
 		public static void ReadPrimitive<TKey, TValue>(Serializer serializer, Stream stream, out Dictionary<TKey, TValue> value)

@@ -8,22 +8,61 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
 
-namespace NetSerializer
+namespace Orckestra.Serialization
 {
 	static class Helpers
 	{
-		public static IEnumerable<FieldInfo> GetFieldInfos(Type type)
-		{
-			Debug.Assert(type.IsSerializable);
+        public static void ValidateIfSerializable(this Type type)
+        {
+            if (typeof(MulticastDelegate).IsAssignableFrom(type))
+            {
+                throw new NotSupportedException(String.Format("Delegate type {0} is not serializable.", type.FullName));
+            }
+            if (typeof(Expression).IsAssignableFrom(type))
+            {
+                throw new NotSupportedException(String.Format("Expression of type {0} is not serializable.", type.FullName));
+            }
 
-			var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+            if (type.Namespace != null
+                && (type.Namespace.StartsWith("System") || type.Namespace.StartsWith("Microsoft"))
+                && !type.IsDictionary())
+            {
+                if (!type.IsSerializable)
+                {
+                    throw new NotSupportedException(String.Format(".Net type {0} is not marked as Serializable",
+                                                                  type.FullName));
+                }
+
+                if (typeof(System.Runtime.Serialization.ISerializable).IsAssignableFrom(type))
+                {
+                    throw new NotSupportedException(String.Format("Cannot serialize {0}: ISerializable not supported",
+                                                                  type.FullName));
+                }
+            }
+        }
+
+        public static bool IsDictionary(this Type type)
+        {
+            if (!type.IsGenericType)
+                return false;
+
+            var genTypeDef = type.GetGenericTypeDefinition();
+
+            return genTypeDef == typeof(Dictionary<,>);
+        }
+
+        public static IEnumerable<FieldInfo> GetFieldInfos(Type type)
+		{
+		    type.ValidateIfSerializable();
+            //Debug.Assert(type.IsSerializable);
+
+            var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
 				.Where(fi => (fi.Attributes & FieldAttributes.NotSerialized) == 0)
 				.OrderBy(f => f.Name, StringComparer.Ordinal);
 

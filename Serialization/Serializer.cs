@@ -8,13 +8,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Diagnostics;
+using Orckestra.Serialization.TypeSerializers;
 
-namespace NetSerializer
+namespace Orckestra.Serialization
 {
 	delegate void SerializeDelegate<T>(Serializer serializer, Stream stream, T ob);
 	delegate void DeserializeDelegate<T>(Serializer serializer, Stream stream, out T ob);
@@ -26,26 +27,50 @@ namespace NetSerializer
 			new PrimitivesSerializer(),
 			new ArraySerializer(),
 			new EnumSerializer(),
-			new DictionarySerializer(),
+			//new DictionarySerializer(),
 			new NullableSerializer(),
-			new GenericSerializer(),
+
+            // additional serializers
+            new UniversalDictionarySerializer(), 
+            new HashsetSerializer(),
+            new HashtableSerializer(),
+            // /additional serializers
+            
+            new GenericSerializer(), // the GenericSerializer must be the last one
 		};
 
-		/// <summary>
-		/// Initialize NetSerializer
-		/// </summary>
-		/// <param name="rootTypes">Types to be (de)serialized</param>
-		public Serializer(IEnumerable<Type> rootTypes)
+        /// <summary>
+        /// Initialize Serializer
+        /// </summary>
+        public Serializer()
+            : this(new Type[0])
+	    {
+        }
+
+        /// <summary>
+        /// Initialize Serializer
+        /// </summary>
+		/// <param name="userTypeSerializers">Array of custom serializers</param>
+        public Serializer(ITypeSerializer[] userTypeSerializers)
+            : this(new Type[0], userTypeSerializers)
+        {
+        }
+
+        /// <summary>
+        /// Initialize Serializer
+        /// </summary>
+        /// <param name="rootTypes">Types to be (de)serialized</param>
+        public Serializer(IEnumerable<Type> rootTypes)
 			: this(rootTypes, new ITypeSerializer[0])
 		{
 		}
 
-		/// <summary>
-		/// Initialize NetSerializer
-		/// </summary>
-		/// <param name="rootTypes">Types to be (de)serialized</param>
-		/// <param name="userTypeSerializers">Array of custom serializers</param>
-		public Serializer(IEnumerable<Type> rootTypes, ITypeSerializer[] userTypeSerializers)
+        /// <summary>
+        /// Initialize Serializer
+        /// </summary>
+        /// <param name="rootTypes">Types to be (de)serialized</param>
+        /// <param name="userTypeSerializers">Array of custom serializers</param>
+        public Serializer(IEnumerable<Type> rootTypes, ITypeSerializer[] userTypeSerializers)
 		{
 			if (userTypeSerializers.All(s => s is IDynamicTypeSerializer || s is IStaticTypeSerializer) == false)
 				throw new ArgumentException("TypeSerializers have to implement IDynamicTypeSerializer or IStaticTypeSerializer");
@@ -166,15 +191,29 @@ namespace NetSerializer
 
 		uint m_nextAvailableTypeID = 1;
 
-		[Conditional("DEBUG")]
-		void AssertLocked()
-		{
-			Debug.Assert(System.Threading.Monitor.IsEntered(m_modifyLock));
-		}
+        [Conditional("DEBUG")]
+        void AssertLocked()
+        {
+            Debug.Assert(System.Threading.Monitor.IsEntered(m_modifyLock));
+        }
 
-		public void Serialize(Stream stream, object ob)
+        [Conditional("DEBUG")]
+        void AssertUnlocked()
+        {
+            Debug.Assert(!System.Threading.Monitor.IsEntered(m_modifyLock));
+        }
+
+        public void Serialize(Stream stream, object ob)
+        {
+            using (var watcher = new ReferenceWatcher())
+            {
+                SerializeImpl(stream, ob);
+            }
+        }
+
+		internal void SerializeImpl(Stream stream, object ob)
 		{
-			ObjectSerializer.Serialize(this, stream, ob);
+            ObjectSerializer.Serialize(this, stream, ob);
 		}
 
 		public object Deserialize(Stream stream)
@@ -217,8 +256,8 @@ namespace NetSerializer
 
 		internal uint GetTypeIdAndSerializer(Type type, out SerializeDelegate<object> del)
 		{
-			var data = m_runtimeTypeMap[type];
-
+		    var data = GetOrGenerateTypeData(type);
+			
 			if (data.WriterTrampolineDelegate != null)
 			{
 				del = data.WriterTrampolineDelegate;
@@ -232,7 +271,26 @@ namespace NetSerializer
 			}
 		}
 
-		internal DeserializeDelegate<object> GetDeserializeTrampolineFromId(uint id)
+	    internal TypeData GetOrGenerateTypeData(Type type)
+	    {
+	        TypeData data;
+	        if (!m_runtimeTypeMap.TryGetValue(type,
+	                                          out data))
+	        {
+	            AssertUnlocked();
+	            lock (m_modifyLock)
+	            {
+	                AddTypesInternal(new[]
+	                                 {
+	                                     type
+	                                 });
+	            }
+	            data = m_runtimeTypeMap[type];
+	        }
+	        return data;
+	    }
+
+	    internal DeserializeDelegate<object> GetDeserializeTrampolineFromId(uint id)
 		{
 			var data = m_runtimeTypeIDList[id];
 

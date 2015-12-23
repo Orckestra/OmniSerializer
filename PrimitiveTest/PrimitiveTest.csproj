@@ -40,9 +40,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NetSerializer\NetSerializer.csproj">
+    <ProjectReference Include="..\Serialization\Serialization.csproj">
       <Project>{85A11D07-8D18-42D5-ACCF-EF9744EFE825}</Project>
-      <Name>NetSerializer</Name>
+      <Name>Serialization</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

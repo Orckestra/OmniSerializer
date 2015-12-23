@@ -7,12 +7,9 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading;
 
-namespace NetSerializer
+namespace Orckestra.Serialization
 {
 	/// <summary>
 	/// Threadsafe TypeID -> TypeData list, which supports lockless reading.

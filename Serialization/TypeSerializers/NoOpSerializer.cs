@@ -9,16 +9,16 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
 
-namespace NetSerializer
+namespace Orckestra.Serialization.TypeSerializers
 {
-	/// <summary>
-	/// A "no-op" TypeSerializer which can be used to make the NetSerializer ignore fields of certain type.
-	/// For example, Delegates cannot be serializer by default, and NoOpSerializer could be used to ignore all subclasses of Delegate
-	/// </summary>
-	sealed class NoOpSerializer : IStaticTypeSerializer
+    /// <summary>
+    /// A "no-op" TypeSerializer which can be used to make the Serializer ignore fields of certain type.
+    /// For example, Delegates cannot be serializer by default, and NoOpSerializer could be used to ignore all subclasses of Delegate
+    /// </summary>
+    sealed class NoOpSerializer : IStaticTypeSerializer
 	{
 		Type[] m_types;
 		bool m_handleSubclasses;

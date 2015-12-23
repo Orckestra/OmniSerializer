@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using NS = NetSerializer;
+using Orckestra.Serialization;
 using PB = ProtoBuf;
 
 namespace Test
@@ -21,9 +21,9 @@ namespace Test
 
 	class NetSerializerSpecimen : ISerializerSpecimen
 	{
-		NS.Serializer m_serializer;
+		Serializer m_serializer;
 
-		public NetSerializerSpecimen(NS.Serializer serializer)
+		public NetSerializerSpecimen(Serializer serializer)
 		{
 			m_serializer = serializer;
 		}

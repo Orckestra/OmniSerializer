@@ -7,13 +7,11 @@
  */
 
 using System;
-using System.Linq;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Collections.Generic;
 
-namespace NetSerializer
+namespace Orckestra.Serialization
 {
 	public static class Primitives
 	{
