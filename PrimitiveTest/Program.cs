@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
-using Orckestra.Serialization;
+using OmniSerializer;
 
 namespace PrimitiveTest
 {

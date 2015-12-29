@@ -2,14 +2,20 @@ This project is a fork of [NetSerializer](https://github.com/tomba/netserializer
 
 - No longer requires the classes to be decorated with [Serializable]
   - Classes from the System.* and Microsoft.* namespaces without [Serializable] are not supported and will not be serialized
-- Types to serialize are automatically detected.  
+- Block the serialization of anonymous types since they cannot be safely deserialized in another instance/process because the anonymous type is not known when a process restart
+- Allows deferred IEnumerable<> to be serialized
+- Types to serialize are automatically detected
   - This is achieved by adding the type's name to the serialized stream instead of the 'TypeId' value
+	- Types are cached in a static field to speed up the serialization/deserialization
   - Fields are still serialized in the same order as NetSerializer so client and server must still have the same version.  An exception will be thrown if a class was modified since it was serialized (e.g.: different number of fields).
 - Throws an exception when a circular reference is detected instead of generating a stack overflow
-- A new dictionary serializer was created to:
-    - Allow inheriting from a Dictionary<,>
-    - Serialize the comparer
-    - This new serializer requires a parameter less constructor
 - New serializers:
     - Hashset
     - Hashtable
+	- ExpandoObject
+	- EqualityComparer
+	- Universal Dictionary serializer (see below)
+- A new dictionary serializer was created to:
+    - Allow inheriting any class from Dictionary<,>
+    - Serialize the comparer
+    - This new serializer requires a parameter less constructor

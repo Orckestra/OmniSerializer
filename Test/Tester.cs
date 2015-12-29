@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using Orckestra.Serialization;
+using OmniSerializer;
 
 namespace Test
 {
@@ -14,7 +14,7 @@ namespace Test
 			var types = GetKnownTypes().ToArray();
 
 			var sw = Stopwatch.StartNew();
-			var serializer = new Serializer(types, new ITypeSerializer[] { new TriDimArrayCustomSerializer() });
+			var serializer = new Serializer(types);
 			sw.Stop();
 
 			Console.WriteLine("Serializer.Initialize() in {0} ms", sw.ElapsedMilliseconds);

@@ -41,7 +41,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomSerializers.cs" />
+    <Compile Include="TriDimArrayCustomSerializer.cs" />
     <Compile Include="ITest.cs" />
     <Compile Include="ITestSpec.cs" />
     <Compile Include="MessageTestSpec.cs" />
@@ -57,9 +57,9 @@
     <Compile Include="MessageTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Serialization\Serialization.csproj">
+    <ProjectReference Include="..\OmniSerializer\OmniSerializer.csproj">
       <Project>{85A11D07-8D18-42D5-ACCF-EF9744EFE825}</Project>
-      <Name>Serialization</Name>
+      <Name>OmniSerializer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Orckestra.Serialization;
+using OmniSerializer;
 using PB = ProtoBuf;
 
 namespace Test
@@ -50,7 +50,7 @@ namespace Test
 		public void Serialize<T>(Stream stream, T[] msgs)
 		{
 			foreach (var msg in msgs)
-				m_serializer.Serialize(stream, msg);
+				m_serializer.SerializeObject(stream, msg);
 		}
 
 		public void Deserialize<T>(Stream stream, T[] msgs)
