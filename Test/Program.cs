@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
-using NS = NetSerializer;
+using OmniSerializer;
 
 namespace Test
 {
@@ -18,7 +18,7 @@ namespace Test
 		static int NumThreads = 1;
 		static bool ShareSerializer = false;
 
-		static NS.Serializer s_sharedSerializer;
+		static Serializer s_sharedSerializer;
 
 		static void Main(string[] args)
 		{

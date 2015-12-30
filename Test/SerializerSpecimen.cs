@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using NS = NetSerializer;
+using OmniSerializer;
 using PB = ProtoBuf;
 
 namespace Test
@@ -21,9 +21,9 @@ namespace Test
 
 	class NetSerializerSpecimen : ISerializerSpecimen
 	{
-		NS.Serializer m_serializer;
+		Serializer m_serializer;
 
-		public NetSerializerSpecimen(NS.Serializer serializer)
+		public NetSerializerSpecimen(Serializer serializer)
 		{
 			m_serializer = serializer;
 		}
@@ -50,7 +50,7 @@ namespace Test
 		public void Serialize<T>(Stream stream, T[] msgs)
 		{
 			foreach (var msg in msgs)
-				m_serializer.Serialize(stream, msg);
+				m_serializer.SerializeObject(stream, msg);
 		}
 
 		public void Deserialize<T>(Stream stream, T[] msgs)

@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using NS = NetSerializer;
+using OmniSerializer;
 
 namespace Test
 {
 	class Tester
 	{
-		public static NS.Serializer CreateSerializer()
+		public static Serializer CreateSerializer()
 		{
 			var types = GetKnownTypes().ToArray();
 
 			var sw = Stopwatch.StartNew();
-			var serializer = new NS.Serializer(types, new NS.ITypeSerializer[] { new TriDimArrayCustomSerializer() });
+			var serializer = new Serializer(types);
 			sw.Stop();
 
 			Console.WriteLine("Serializer.Initialize() in {0} ms", sw.ElapsedMilliseconds);
@@ -31,7 +31,7 @@ namespace Test
 		{
 		}
 
-		public Tester(NS.Serializer serializer)
+		public Tester(Serializer serializer)
 		{
 			m_specimens.Add(new NetSerializerSpecimen(serializer));
 

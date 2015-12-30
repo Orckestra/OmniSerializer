@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using OmniSerializer;
 
 namespace PrimitiveTest
 {
@@ -29,10 +30,10 @@ namespace PrimitiveTest
 
 				for (int i = 0; i < loops; ++i)
 				{
-					NetSerializer.Primitives.WritePrimitive(stream, v1);
-					NetSerializer.Primitives.WritePrimitive(stream, v2);
-					NetSerializer.Primitives.WritePrimitive(stream, v3);
-					NetSerializer.Primitives.WritePrimitive(stream, v4);
+					Primitives.WritePrimitive(stream, v1);
+					Primitives.WritePrimitive(stream, v2);
+					Primitives.WritePrimitive(stream, v3);
+					Primitives.WritePrimitive(stream, v4);
 				}
 
 				sw.Stop();
@@ -55,10 +56,10 @@ namespace PrimitiveTest
 
 				for (int i = 0; i < loops; ++i)
 				{
-					NetSerializer.Primitives.ReadPrimitive(stream, out v1);
-					NetSerializer.Primitives.ReadPrimitive(stream, out v2);
-					NetSerializer.Primitives.ReadPrimitive(stream, out v3);
-					NetSerializer.Primitives.ReadPrimitive(stream, out v4);
+					Primitives.ReadPrimitive(stream, out v1);
+					Primitives.ReadPrimitive(stream, out v2);
+					Primitives.ReadPrimitive(stream, out v3);
+					Primitives.ReadPrimitive(stream, out v4);
 				}
 
 				sw.Stop();
