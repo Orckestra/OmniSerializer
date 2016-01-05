@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Numerics;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OmniSerializer.Exceptions;
@@ -672,6 +673,30 @@ namespace OmniSerializer.Tests
         }
 
         [TestMethod]
+        public void SerializeHashSetWithEqualityComparer()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                var serialiser = new Serializer();
+                var instance = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase) { "a", "b", "C" };
+
+                serialiser.SerializeObject(memoryStream,
+                                     instance);
+                memoryStream.Position = 0;
+
+                var deserialiser = new Serializer();
+                var deserializedValue = (HashSet<string>)deserialiser.Deserialize(memoryStream);
+
+                Assert.AreEqual(instance.Comparer.GetType(),
+                                deserializedValue.Comparer.GetType());
+                Assert.AreEqual(instance.Count(),
+                                deserializedValue.Count());
+                CollectionAssert.AreEquivalent(instance.ToList(),
+                                               deserializedValue.ToList());
+            }
+        }
+
+        [TestMethod]
         public void SerializeObjectWithEnumProperty()
         {
             using (var memoryStream = new MemoryStream())
@@ -715,6 +740,49 @@ namespace OmniSerializer.Tests
                 CollectionAssert.AreEquivalent(instance,
                                                deserializedValue);
             }
+        }
+
+        [TestMethod]
+        public void SerializeHashtableWithEqualityComparer()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                var serialiser = new Serializer();
+                var instance = new Hashtable(StringComparer.CurrentCultureIgnoreCase)
+                               {
+                                   {"e", 2},
+                                   {"a", "b"},
+                               };
+
+                serialiser.SerializeObject(memoryStream,
+                                     instance);
+                memoryStream.Position = 0;
+
+                var deserialiser = new Serializer();
+                var deserializedValue = (Hashtable)deserialiser.Deserialize(memoryStream);
+
+                Assert.IsNotNull(GetHashTableComparer(instance));
+                Assert.IsNotNull(GetHashTableComparer(deserializedValue));
+                Assert.AreEqual(GetHashTableComparer(instance).GetType(),
+                                GetHashTableComparer(deserializedValue).GetType());
+                Assert.AreEqual(instance.Count,
+                                deserializedValue.Count);
+                CollectionAssert.AreEquivalent(instance,
+                                               deserializedValue);
+            }
+        }
+
+        private object GetHashTableComparer(Hashtable ht)
+        {
+            if (ht == null)
+            {
+                return null;
+            }
+
+            return ht.GetType()
+                     .GetProperty("EqualityComparer",
+                                  BindingFlags.NonPublic | BindingFlags.GetProperty | BindingFlags.Instance)
+                     .GetValue(ht);
         }
 
         [TestMethod]
@@ -1153,6 +1221,116 @@ namespace OmniSerializer.Tests
                                 deserializedValue.Property2);
                 Assert.AreEqual(instance.Property3,
                                 deserializedValue.Property3);
+            }
+        }
+
+        [TestMethod]
+        public void SerializeTypedQueue()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                var serialiser = new Serializer();
+                var instance = new Queue<int>();
+                instance.Enqueue(1);
+                instance.Enqueue(2);
+                instance.Enqueue(3);
+
+                serialiser.SerializeObject(memoryStream,
+                                           instance);
+                memoryStream.Position = 0;
+
+                var deserialiser = new Serializer();
+                var deserializedValue = (Queue<int>)deserialiser.Deserialize(memoryStream);
+
+                Assert.IsNotNull(deserializedValue);
+
+                Assert.AreEqual(instance.Count,
+                                deserializedValue.Count);
+                CollectionAssert.AreEquivalent(instance.ToArray(),
+                                               deserializedValue.ToArray());
+            }
+        }
+
+        [TestMethod]
+        public void SerializeUntypedQueue()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                var serialiser = new Serializer();
+                var instance = new Queue();
+                instance.Enqueue(1);
+                instance.Enqueue(2);
+                instance.Enqueue("abc");
+                instance.Enqueue(new IntGenericBaseClass(123));
+                
+                serialiser.SerializeObject(memoryStream,
+                                           instance);
+                memoryStream.Position = 0;
+
+                var deserialiser = new Serializer();
+                var deserializedValue = (Queue)deserialiser.Deserialize(memoryStream);
+
+                Assert.IsNotNull(deserializedValue);
+
+                Assert.AreEqual(instance.Count,
+                                deserializedValue.Count);
+                CollectionAssert.AreEquivalent(instance.ToArray(),
+                                               deserializedValue.ToArray());
+            }
+        }
+
+        [TestMethod]
+        public void SerializeTypedStack()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                var serialiser = new Serializer();
+                var instance = new Stack<int>();
+                instance.Push(1);
+                instance.Push(2);
+                instance.Push(3);
+
+                serialiser.SerializeObject(memoryStream,
+                                           instance);
+                memoryStream.Position = 0;
+
+                var deserialiser = new Serializer();
+                var deserializedValue = (Stack<int>)deserialiser.Deserialize(memoryStream);
+
+                Assert.IsNotNull(deserializedValue);
+
+                Assert.AreEqual(instance.Count,
+                                deserializedValue.Count);
+                CollectionAssert.AreEquivalent(instance.ToArray(),
+                                               deserializedValue.ToArray());
+            }
+        }
+
+        [TestMethod]
+        public void SerializeUntypedStack()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                var serialiser = new Serializer();
+                var instance = new Stack();
+                instance.Push(1);
+                instance.Push(2);
+                instance.Push("abc");
+                instance.Push(new IntGenericBaseClass(123));
+
+                serialiser.SerializeObject(memoryStream,
+                                           instance);
+                memoryStream.Position = 0;
+
+                var deserialiser = new Serializer();
+                var deserializedValue = (Stack)deserialiser.Deserialize(memoryStream);
+
+                Assert.IsNotNull(deserializedValue);
+
+                Assert.AreEqual(instance.Count,
+                                deserializedValue.Count);
+                CollectionAssert.AreEquivalent(instance.ToArray(),
+                                               deserializedValue.ToArray());
             }
         }
 
