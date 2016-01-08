@@ -14,9 +14,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using OmniSerializer.Exceptions;
 
-namespace OmniSerializer.TypeSerializers
+namespace Orckestra.OmniSerializer.TypeSerializers
 {
 	sealed class ObjectSerializer : IStaticTypeSerializer
 	{

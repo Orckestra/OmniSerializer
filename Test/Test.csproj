@@ -57,9 +57,9 @@
     <Compile Include="MessageTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OmniSerializer\OmniSerializer.csproj">
+    <ProjectReference Include="..\OmniSerializer\Orckestra.OmniSerializer.csproj">
       <Project>{85A11D07-8D18-42D5-ACCF-EF9744EFE825}</Project>
-      <Name>OmniSerializer</Name>
+      <Name>Orckestra.OmniSerializer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

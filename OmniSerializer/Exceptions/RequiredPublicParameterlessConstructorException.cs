@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace OmniSerializer
+namespace Orckestra.OmniSerializer
 {
     /// <summary>
     /// Exception raised when an object requires a parameterless public constructor to be serialized.

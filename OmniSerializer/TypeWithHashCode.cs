@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace OmniSerializer
+namespace Orckestra.OmniSerializer
 {
     internal class TypeWithHashCode
     {
@@ -23,6 +20,7 @@ namespace OmniSerializer
             {
                 // specified type was not found
                 // we ignore this error because this case is handled elsewhere
+                Type = null;
             }
             ComputeSerializationHashCode();
         }

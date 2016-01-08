@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
-using OmniSerializer;
+using Orckestra.OmniSerializer;
 
 namespace Test
 {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace OmniSerializer.TypeSerializers
+namespace Orckestra.OmniSerializer.TypeSerializers
 {
     /// <summary>
     /// This serializer allows a class that inherits from Dictionary to be serialized.  It also serialize the comparer and properties/fields not defined on the Dictionary class.

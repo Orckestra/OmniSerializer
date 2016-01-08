@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OmniSerializer.Tests.TestObjects
+namespace Orckestra.OmniSerializer.Tests.TestObjects
 {
     [Serializable]
     public struct StructForTesting

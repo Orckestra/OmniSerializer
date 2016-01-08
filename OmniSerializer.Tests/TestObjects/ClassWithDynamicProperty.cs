@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace OmniSerializer.Tests.TestObjects
+﻿namespace Orckestra.OmniSerializer.Tests.TestObjects
 {
     public class ClassWithDynamicProperty
     {

@@ -3,11 +3,9 @@ using System.IO;
 using System.Reflection;
 using System.Reflection.Emit;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OmniSerializer.Exceptions;
 
-namespace OmniSerializer.Tests
-{
-    // The purpose of this project is to test the deserialization process when an object has been modified.
+namespace Orckestra.OmniSerializer.Dynamic.Tests
+{ // The purpose of this project is to test the deserialization process when an object has been modified.
     // We need to used an unsigned Dll to do this dynamically without hardcoding a byte array .
 
     [TestClass]
@@ -28,7 +26,7 @@ namespace OmniSerializer.Tests
                 using (var memoryStream = new MemoryStream(serializedData))
                 {
                     var serialiser = new Serializer();
-                    var instance = (TestNs.TargetClass) serialiser.Deserialize(memoryStream);
+                    var instance = (TargetClass) serialiser.Deserialize(memoryStream);
                     Assert.AreEqual(123,
                                     instance.field0);
                 }
@@ -76,12 +74,12 @@ namespace OmniSerializer.Tests
 
         private static Type CreateType(int numberOfFields)
         {
-            AssemblyName assemblyName = new AssemblyName(typeof(TestNs.TargetClass).Assembly.FullName);
+            AssemblyName assemblyName = new AssemblyName(typeof(TargetClass).Assembly.FullName);
             AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName,
                                                                                             AssemblyBuilderAccess.RunAndCollect);
             ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(assemblyName.Name,
                                                                               assemblyName.Name + ".dll");
-            TypeBuilder typeBuilder = moduleBuilder.DefineType("TestNs.TargetClass",
+            TypeBuilder typeBuilder = moduleBuilder.DefineType(typeof(TargetClass).FullName,
                                                                TypeAttributes.Public);
 
             FieldBuilder fieldBuilder = typeBuilder.DefineField("field" + 0,
@@ -89,8 +87,7 @@ namespace OmniSerializer.Tests
                                                                 FieldAttributes.Private);
 
             Type[] constructorArgs = { typeof(int) };
-            ConstructorBuilder constructor = typeBuilder.DefineConstructor(
-               MethodAttributes.Public, CallingConventions.Standard, constructorArgs);
+            ConstructorBuilder constructor = typeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, constructorArgs);
             ILGenerator constructorIL = constructor.GetILGenerator();
             constructorIL.Emit(OpCodes.Ldarg_0);
             ConstructorInfo superConstructor = typeof(Object).GetConstructor(new Type[0]);
@@ -102,7 +99,7 @@ namespace OmniSerializer.Tests
 
             // Create the MyMethod method.
             MethodBuilder myMethodBuilder = typeBuilder.DefineMethod("MyMethod",
-                                 MethodAttributes.Public, typeof(int), null);
+                                                                     MethodAttributes.Public, typeof(int), null);
             ILGenerator methodIL = myMethodBuilder.GetILGenerator();
             methodIL.Emit(OpCodes.Ldarg_0);
             methodIL.Emit(OpCodes.Ldfld, fieldBuilder);
@@ -112,10 +109,7 @@ namespace OmniSerializer.Tests
             return typeBuilder.CreateType();
         }
     }
-}
 
-namespace TestNs
-{
     public class TargetClass
     {
         public int field0;

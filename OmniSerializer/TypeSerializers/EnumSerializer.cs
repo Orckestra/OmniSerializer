@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace OmniSerializer.TypeSerializers
+namespace Orckestra.OmniSerializer.TypeSerializers
 {
 	sealed class EnumSerializer : IStaticTypeSerializer
 	{

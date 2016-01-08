@@ -8,8 +8,8 @@
     <ProjectGuid>{85A11D07-8D18-42D5-ACCF-EF9744EFE825}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OmniSerializer</RootNamespace>
-    <AssemblyName>OmniSerializer</AssemblyName>
+    <RootNamespace>Orckestra.OmniSerializer</RootNamespace>
+    <AssemblyName>Orckestra.OmniSerializer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

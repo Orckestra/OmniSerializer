@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace OmniSerializer
+namespace Orckestra.OmniSerializer
 {
     /// <summary>
     /// Exception raised when an object has already been serialized in the current object graph.

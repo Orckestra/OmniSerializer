@@ -11,7 +11,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace OmniSerializer
+namespace Orckestra.OmniSerializer
 {
 	public static class Primitives
 	{

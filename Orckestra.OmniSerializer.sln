@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmniSerializer", "OmniSerializer\OmniSerializer.csproj", "{85A11D07-8D18-42D5-ACCF-EF9744EFE825}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.OmniSerializer", "OmniSerializer\Orckestra.OmniSerializer.csproj", "{85A11D07-8D18-42D5-ACCF-EF9744EFE825}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{DD1A3698-ED72-49C8-874F-F721EA8012B6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimitiveTest", "PrimitiveTest\PrimitiveTest.csproj", "{CBA6D818-4B6A-4A80-95D5-7F5EC3FBB3C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmniSerializer.Tests", "OmniSerializer.Tests\OmniSerializer.Tests.csproj", "{306FE793-C33A-443B-94D2-A5EBD79C8D4A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.OmniSerializer.Tests", "OmniSerializer.Tests\Orckestra.OmniSerializer.Tests.csproj", "{306FE793-C33A-443B-94D2-A5EBD79C8D4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmniSerializer.Dynamic.Tests", "OmniSerializer.Dynamic.Tests\OmniSerializer.Dynamic.Tests.csproj", "{5BC3CA1A-E46A-4EC2-A107-4244D61B7C56}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.OmniSerializer.Dynamic.Tests", "OmniSerializer.Dynamic.Tests\Orckestra.OmniSerializer.Dynamic.Tests.csproj", "{5BC3CA1A-E46A-4EC2-A107-4244D61B7C56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

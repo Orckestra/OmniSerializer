@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{306FE793-C33A-443B-94D2-A5EBD79C8D4A}</ProjectGuid>
+    <ProjectGuid>{5BC3CA1A-E46A-4EC2-A107-4244D61B7C56}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OmniSerializer.Tests</RootNamespace>
-    <AssemblyName>OmniSerializer.Tests</AssemblyName>
+    <RootNamespace>Orckestra.OmniSerializer.Dynamic.Tests</RootNamespace>
+    <AssemblyName>Orckestra.OmniSerializer.Dynamic.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -37,16 +37,8 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>SerializerKey.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
-    <Reference Include="System.Numerics" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -56,38 +48,19 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-          <Private>False</Private>
-        </Reference>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="DynamicClassSerializerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerializerTests.cs" />
-    <Compile Include="TestObjects\CircularReference.cs" />
-    <Compile Include="TestObjects\ClassWithDynamicProperty.cs" />
-    <Compile Include="TestObjects\ClassWithClassProperty.cs" />
-    <Compile Include="TestObjects\ClassWithDifferentAccessModifiers.cs" />
-    <Compile Include="TestObjects\ClassWithIEnumerable.cs" />
-    <Compile Include="TestObjects\ClassWithoutSerializableAttribute.cs" />
-    <Compile Include="TestObjects\CustomDictionaries.cs" />
-    <Compile Include="TestObjects\EnumForTesting.cs" />
-    <Compile Include="TestObjects\GenericBaseClass.cs" />
-    <Compile Include="TestObjects\HierarchyClasses.cs" />
-    <Compile Include="TestObjects\TestStruct.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OmniSerializer\OmniSerializer.csproj">
+    <ProjectReference Include="..\OmniSerializer\Orckestra.OmniSerializer.csproj">
       <Project>{85a11d07-8d18-42d5-accf-ef9744efe825}</Project>
-      <Name>OmniSerializer</Name>
+      <Name>Orckestra.OmniSerializer</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\OmniSerializer\Properties\SerializerKey.snk">
-      <Link>Properties\SerializerKey.snk</Link>
-    </None>
-    <None Include="SerializerKey.snk" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

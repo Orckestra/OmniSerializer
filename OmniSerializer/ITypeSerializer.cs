@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace OmniSerializer
+namespace Orckestra.OmniSerializer
 {
 	public interface ITypeSerializer
 	{

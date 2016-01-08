@@ -9,10 +9,9 @@ using System.Numerics;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OmniSerializer.Exceptions;
-using OmniSerializer.Tests.TestObjects;
+using Orckestra.OmniSerializer.Tests.TestObjects;
 
-namespace OmniSerializer.Tests
+namespace Orckestra.OmniSerializer.Tests
 {
     [TestClass]
     public class SerializerTests

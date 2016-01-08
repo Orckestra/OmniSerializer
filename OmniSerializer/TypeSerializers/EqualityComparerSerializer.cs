@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace OmniSerializer.TypeSerializers
+namespace Orckestra.OmniSerializer.TypeSerializers
 {
     internal class EqualityComparerSerializer : BinaryFormatterSerializer
     {

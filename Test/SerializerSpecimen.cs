@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using OmniSerializer;
+using Orckestra.OmniSerializer;
 using PB = ProtoBuf;
 
 namespace Test

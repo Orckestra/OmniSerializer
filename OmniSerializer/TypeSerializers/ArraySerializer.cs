@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 
-namespace OmniSerializer.TypeSerializers
+namespace Orckestra.OmniSerializer.TypeSerializers
 {
 	sealed class ArraySerializer : IDynamicTypeSerializer
 	{

@@ -1,4 +1,4 @@
-﻿namespace OmniSerializer
+﻿namespace Orckestra.OmniSerializer
 {
     /// <summary>
     /// Helper class for <see cref="Serializer"/>

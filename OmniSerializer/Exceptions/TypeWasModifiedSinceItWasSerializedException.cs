@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace OmniSerializer.Exceptions
+namespace Orckestra.OmniSerializer
 {
     /// <summary>
     /// Exception raised when the definition of an object was modified since its serialization.

@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace OmniSerializer.TypeSerializers
+namespace Orckestra.OmniSerializer.TypeSerializers
 {
 	sealed class NullableSerializer : IDynamicTypeSerializer
 	{

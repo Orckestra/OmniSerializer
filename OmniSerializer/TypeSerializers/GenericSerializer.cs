@@ -10,9 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using OmniSerializer.Exceptions;
 
-namespace OmniSerializer.TypeSerializers
+namespace Orckestra.OmniSerializer.TypeSerializers
 {
 	sealed class GenericSerializer : IDynamicTypeSerializer
 	{

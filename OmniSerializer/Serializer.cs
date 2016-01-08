@@ -12,9 +12,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using OmniSerializer.TypeSerializers;
+using Orckestra.OmniSerializer.TypeSerializers;
 
-namespace OmniSerializer
+namespace Orckestra.OmniSerializer
 {
 	delegate void SerializeDelegate<T>(Serializer serializer, Stream stream, T ob);
 	delegate void DeserializeDelegate<T>(Serializer serializer, Stream stream, out T ob);

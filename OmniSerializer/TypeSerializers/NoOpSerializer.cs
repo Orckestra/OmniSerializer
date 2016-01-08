@@ -12,7 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace OmniSerializer.TypeSerializers
+namespace Orckestra.OmniSerializer.TypeSerializers
 {
     /// <summary>
     /// A "no-op" TypeSerializer which can be used to make the Serializer ignore fields of certain type.

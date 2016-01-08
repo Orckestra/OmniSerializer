@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OmniSerializer.Tests.TestObjects
+namespace Orckestra.OmniSerializer.Tests.TestObjects
 {
     [Serializable]
     public class CustomDictionary : Dictionary<string, object>

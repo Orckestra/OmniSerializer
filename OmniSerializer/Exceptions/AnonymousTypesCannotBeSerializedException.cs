@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace OmniSerializer.Exceptions
+namespace Orckestra.OmniSerializer
 {
     /// <summary>
     /// Exception raised when trying to serialize an anonymous type.

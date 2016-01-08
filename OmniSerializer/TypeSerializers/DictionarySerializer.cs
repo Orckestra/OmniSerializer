@@ -13,7 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace OmniSerializer.TypeSerializers
+namespace Orckestra.OmniSerializer.TypeSerializers
 {
 	sealed class DictionarySerializer : IStaticTypeSerializer
 	{

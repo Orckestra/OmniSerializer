@@ -8,9 +8,8 @@
 
 using System;
 using System.Reflection;
-using System.Reflection.Emit;
 
-namespace OmniSerializer
+namespace Orckestra.OmniSerializer
 {
 	sealed class TypeData
 	{

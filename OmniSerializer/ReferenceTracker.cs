@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 
-namespace OmniSerializer
+namespace Orckestra.OmniSerializer
 {
-    internal class ReferenceTracker : IDisposable
+    /// <summary>
+    /// Allows an object to be tracked in a graph to detect circular references
+    /// </summary>
+    public class ReferenceTracker : IDisposable
     {
         [ThreadStatic]
         private static ReferenceTracker _tracker;
         [ThreadStatic]
         private static HashSet<object> _trackedObjects;
 
-        internal static ReferenceTracker Current
+        public static ReferenceTracker Current
         {
             get
             {
@@ -20,7 +23,7 @@ namespace OmniSerializer
             }
         }
 
-        internal ReferenceTracker()
+        public ReferenceTracker()
         {
             if (Current != null)
             {
@@ -45,15 +48,14 @@ namespace OmniSerializer
             Thread.EndThreadAffinity();
         }
 
-        internal void TrackObject(object obj)
+        public void TrackObject(object obj)
         {
             if (obj == null)
             {
                 return;
             }
 
-            Debug.Assert(obj.GetType()
-                            .IsClass);
+            Debug.Assert(obj.GetType().IsClass || obj.GetType().IsInterface);
 
             if (_trackedObjects.Contains(obj))
             {
@@ -63,17 +65,20 @@ namespace OmniSerializer
             _trackedObjects.Add(obj);
         }
 
-        internal void RemoveObject(object obj)
+        public void RemoveObject(object obj)
         {
             if (obj == null)
             {
                 return;
             }
 
-            Debug.Assert(obj.GetType()
-                            .IsClass);
+            Debug.Assert(obj.GetType().IsClass || obj.GetType().IsInterface);
 
             _trackedObjects.Remove(obj);
+        }
+        public bool IsTracked(object obj)
+        {
+            return _trackedObjects.Contains(obj);
         }
     }
 }
