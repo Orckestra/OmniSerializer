@@ -1401,5 +1401,64 @@ namespace Orckestra.OmniSerializer.Tests
                 tracker.TrackObject(object2);
             }
         }
+
+        [TestMethod]
+        public void SerializeAnObject()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                var serialiser = new Serializer();
+                var instance = new object();
+
+                serialiser.SerializeObject(memoryStream,
+                                           instance);
+                memoryStream.Position = 0;
+
+                var deserialiser = new Serializer();
+                var deserializedValue = (object)deserialiser.Deserialize(memoryStream);
+
+                Assert.IsNotNull(deserializedValue);
+            }
+        }
+
+        [TestMethod]
+        public void SerializeAClassWithANullObjectProperty()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                var serialiser = new Serializer();
+                var instance = new ClassWithObjectProperty();
+
+                serialiser.SerializeObject(memoryStream,
+                                           instance);
+                memoryStream.Position = 0;
+
+                var deserialiser = new Serializer();
+                var deserializedValue = (ClassWithObjectProperty)deserialiser.Deserialize(memoryStream);
+
+                Assert.IsNotNull(deserializedValue);
+                Assert.IsNull(deserializedValue.Obj);
+            }
+        }
+
+        [TestMethod]
+        public void SerializeAClassWithANotNullObjectProperty()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                var serialiser = new Serializer();
+                var instance = new ClassWithObjectProperty { Obj = new object() };
+
+                serialiser.SerializeObject(memoryStream,
+                                           instance);
+                memoryStream.Position = 0;
+
+                var deserialiser = new Serializer();
+                var deserializedValue = (ClassWithObjectProperty)deserialiser.Deserialize(memoryStream);
+
+                Assert.IsNotNull(deserializedValue);
+                Assert.IsNotNull(deserializedValue.Obj);
+            }
+        }
     }
 }

@@ -66,9 +66,12 @@ namespace Orckestra.OmniSerializer.TypeSerializers
                 Primitives.WritePrimitive(stream, type.AssemblyQualifiedName);  // type
                 Primitives.WritePrimitive(stream, typeHash.HashCode);           // hashcode
 
-                SerializeDelegate<object> del = serializer.GetSerializer(type);
+                if (ob.GetType() != typeof(object))
+                {
+                    SerializeDelegate<object> del = serializer.GetSerializer(type);
 
-                del(serializer, stream, ob);
+                    del(serializer, stream, ob);
+                }
             }
             finally
             {
@@ -161,9 +164,16 @@ namespace Orckestra.OmniSerializer.TypeSerializers
 
             var data = serializer.GetOrGenerateTypeData(typeHash.Type);
 
-			var del = serializer.GetDeserializeTrampolineFromTypeData(data);
-            del(serializer, stream, out ob);
-		}
+            if (typeHash.Type == typeof(object))
+            {
+                ob = new object();
+            }
+            else
+            {
+                var del = serializer.GetDeserializeTrampolineFromTypeData(data);
+                del(serializer, stream, out ob);
+            }
+        }
 
 	    private static readonly ConcurrentDictionary<string, TypeWithHashCode> TypesFromString = new ConcurrentDictionary<string, TypeWithHashCode>(); 
 	    private static TypeWithHashCode GetTypeFromFullName(string typeFullName)
