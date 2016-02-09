@@ -45,6 +45,7 @@ namespace Orckestra.OmniSerializer.Tests
             SerializePrimitive('c');
             SerializePrimitive(new Tuple<int, string>(1, "a"));
             SerializePrimitive(DateTime.UtcNow);
+            SerializePrimitive(new TimeSpan(1,2,3,4,5));
 
             SerializePrimitive((byte?)1);
             SerializePrimitive((sbyte?)1);
@@ -72,6 +73,7 @@ namespace Orckestra.OmniSerializer.Tests
             SerializePrimitive((Single?)null);
             SerializePrimitive((DateTime?)DateTime.UtcNow);
             SerializePrimitive((DateTime?)null);
+            SerializePrimitive((TimeSpan?)null);
         }
 
         private void SerializePrimitive<T>(T value)
