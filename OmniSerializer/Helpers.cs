@@ -76,10 +76,12 @@ namespace Orckestra.OmniSerializer
             return genTypeDef == typeof(Dictionary<,>);
         }
 
-        public static IEnumerable<FieldInfo> GetFieldInfos(Type type)
+        public static IEnumerable<FieldInfo> GetFieldInfos(Type type, bool validateIfTypeIsSerializable)
 		{
-		    type.ValidateIfSerializable();
-            //Debug.Assert(type.IsSerializable);
+            if (validateIfTypeIsSerializable)
+            {
+                type.ValidateIfSerializable();
+            }
 
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
 				.Where(fi => (fi.Attributes & FieldAttributes.NotSerialized) == 0)
@@ -91,7 +93,7 @@ namespace Orckestra.OmniSerializer
 			}
 			else
 			{
-				var baseFields = GetFieldInfos(type.BaseType);
+				var baseFields = GetFieldInfos(type.BaseType, validateIfTypeIsSerializable);
 				return baseFields.Concat(fields);
 			}
 		}

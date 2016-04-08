@@ -60,6 +60,7 @@
     <Compile Include="TypeSerializers\EqualityComparerSerializer.cs" />
     <Compile Include="TypeSerializers\BinaryFormatterSerializer.cs" />
     <Compile Include="TypeSerializers\TriDimArrayCustomSerializer.cs" />
+    <Compile Include="TypeSerializers\SerializedTypeResolver.cs" />
     <Compile Include="TypeSerializers\UniversalDictionarySerializer.cs" />
     <Compile Include="TypeSerializers\HashsetSerializer.cs" />
     <Compile Include="TypeSerializers\HashtableSerializer.cs" />

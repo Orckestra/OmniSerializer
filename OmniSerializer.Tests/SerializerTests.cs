@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Orckestra.OmniSerializer.Tests.TestObjects;
+using Orckestra.OmniSerializer.TypeSerializers;
 
 namespace Orckestra.OmniSerializer.Tests
 {
@@ -85,21 +86,29 @@ namespace Orckestra.OmniSerializer.Tests
 
         private static void SerializePrimitiveValue<T>(T value)
         {
+            var serialiser = new Serializer();
+            Type targetType = typeof(T);
             using (var memoryStream = new MemoryStream())
             {
-                Type targetType = typeof(T);
-                var serialiser = new Serializer();
 
-                serialiser.SerializeObject(memoryStream,
-                                     value);
+                serialiser.SerializeObject(memoryStream, value);
                 memoryStream.Position = 0;
-
-                T deserializedValue = (T) serialiser.Deserialize(memoryStream);
+                T deserializedValue = (T)Deserialize(serialiser, memoryStream);
 
                 Assert.AreEqual(value,
                                 deserializedValue,
                                 string.Format("Type {0} does not have the same value after being deserialized.",
                                               targetType));
+
+            }
+        }
+
+        private static object Deserialize(Serializer serializer, MemoryStream stream)
+        {
+            var bytes = stream.ToArray();
+            using (var ms = new MemoryStream(bytes, 0, bytes.Length, false, true))
+            {
+                return serializer.Deserialize(ms);
             }
         }
 
@@ -359,6 +368,68 @@ namespace Orckestra.OmniSerializer.Tests
         }
 
         [TestMethod]
+        public void SerializeDictionaryIntString()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                var instance = new Dictionary<int, string>()
+                {
+                    {1, "Value1"},
+                    {2, "Value2"},
+                    {3, "Value3"}
+                };
+                var serialiser = new Serializer();
+
+                serialiser.SerializeObject(memoryStream,
+                                     instance);
+                memoryStream.Position = 0;
+
+                var deserializedValue = (Dictionary<int, string>)serialiser.Deserialize(memoryStream);
+
+                Assert.AreEqual(instance.Count,
+                                deserializedValue.Count);
+                CollectionAssert.AreEquivalent(instance.Keys,
+                                               deserializedValue.Keys);
+                foreach (var kvp in instance)
+                {
+                    Assert.AreEqual(kvp.Value,
+                                    deserializedValue[kvp.Key]);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void SerializeDictionaryGuidString()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                var instance = new Dictionary<Guid, string>()
+                {
+                    {Guid.NewGuid(), "Value1"},
+                    {Guid.NewGuid(), "Value2"},
+                    {Guid.NewGuid(), "Value3"}
+                };
+                var serialiser = new Serializer();
+
+                serialiser.SerializeObject(memoryStream,
+                                     instance);
+                memoryStream.Position = 0;
+
+                var deserializedValue = (Dictionary<Guid, string>)serialiser.Deserialize(memoryStream);
+
+                Assert.AreEqual(instance.Count,
+                                deserializedValue.Count);
+                CollectionAssert.AreEquivalent(instance.Keys,
+                                               deserializedValue.Keys);
+                foreach (var kvp in instance)
+                {
+                    Assert.AreEqual(kvp.Value,
+                                    deserializedValue[kvp.Key]);
+                }
+            }
+        }
+
+        [TestMethod]
         public void SerializeCustomDictionary()
         {
             using (var memoryStream = new MemoryStream())
@@ -407,6 +478,39 @@ namespace Orckestra.OmniSerializer.Tests
                 memoryStream.Position = 0;
 
                 var deserializedValue = (CustomDictionary)serialiser.Deserialize(memoryStream);
+
+                Assert.AreEqual(instance.Comparer.GetType(),
+                                deserializedValue.Comparer.GetType());
+                Assert.AreEqual(instance.Count,
+                                deserializedValue.Count);
+                CollectionAssert.AreEquivalent(instance.Keys,
+                                               deserializedValue.Keys);
+                foreach (var kvp in instance)
+                {
+                    Assert.AreEqual(kvp.Value,
+                                    deserializedValue[kvp.Key]);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void SerializeDictionaryWithCustomComparer()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                var instance = new Dictionary<StructForTesting, object>(new StructForTestingComparer())
+                {
+                    {new StructForTesting { Value = 1 }, 123},
+                    {new StructForTesting { Value = 2 }, "abc"},
+                    {new StructForTesting { Value = 3 }, new IntGenericBaseClass(3) },
+                };
+                var serialiser = new Serializer();
+
+                serialiser.SerializeObject(memoryStream,
+                                     instance);
+                memoryStream.Position = 0;
+
+                var deserializedValue = (Dictionary<StructForTesting, object>)serialiser.Deserialize(memoryStream);
 
                 Assert.AreEqual(instance.Comparer.GetType(),
                                 deserializedValue.Comparer.GetType());
@@ -1154,7 +1258,7 @@ namespace Orckestra.OmniSerializer.Tests
 
             bytes[10] = (byte)'z'; // change the type to something invalid
 
-            using (var memoryStream = new MemoryStream(bytes))
+            using (var memoryStream = new MemoryStream(bytes, 0, bytes.Length, false, true))
             {
                 var deserialiser = new Serializer();
                 var deserializedValue = (IntGenericBaseClass)deserialiser.Deserialize(memoryStream);
@@ -1179,7 +1283,7 @@ namespace Orckestra.OmniSerializer.Tests
                 bytes = memoryStream.ToArray();
             }
 
-            var needle = typeof(IntGenericBaseClass).AssemblyQualifiedName;
+            var needle = SerializedTypeResolver.GetShortNameFromType(typeof(IntGenericBaseClass));
             var index = System.Text.Encoding.ASCII.GetString(bytes).IndexOf(needle);
 
             // this is a hackish way to change the hashcode of a serialized object

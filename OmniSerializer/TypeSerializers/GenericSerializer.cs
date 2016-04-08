@@ -29,7 +29,7 @@ namespace Orckestra.OmniSerializer.TypeSerializers
 
 		public IEnumerable<Type> GetSubtypes(Type type)
 		{
-			var fields = Helpers.GetFieldInfos(type);
+			var fields = Helpers.GetFieldInfos(type, true);
             
 			foreach (var field in fields)
 				yield return field.FieldType;
@@ -39,7 +39,7 @@ namespace Orckestra.OmniSerializer.TypeSerializers
 		{
 			// arg0: Serializer, arg1: Stream, arg2: value
 
-			var fields = Helpers.GetFieldInfos(type);
+			var fields = Helpers.GetFieldInfos(type, true);
 
 			foreach (var field in fields)
 			{
@@ -84,7 +84,7 @@ namespace Orckestra.OmniSerializer.TypeSerializers
 				il.Emit(OpCodes.Stind_Ref);
 			}
 
-			var fields = Helpers.GetFieldInfos(type);
+			var fields = Helpers.GetFieldInfos(type, true);
 
 			foreach (var field in fields)
 			{

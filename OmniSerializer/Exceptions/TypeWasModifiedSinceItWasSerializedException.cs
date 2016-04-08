@@ -14,8 +14,18 @@ namespace Orckestra.OmniSerializer
         /// </summary>
         /// <param name="type">The type that was modified since it was serialized.</param>
         public TypeWasModifiedSinceItWasSerializedException(Type type)
-            : base(string.Format("Type {0} was modified since it was serialized.",
-                                 type)) { }
+            : this(string.Format("Type {0} was modified since it was serialized.",
+                                 type))
+        { }
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TypeWasModifiedSinceItWasSerializedException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        public TypeWasModifiedSinceItWasSerializedException(string message)
+            : base(message)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeWasModifiedSinceItWasSerializedException"/> class.

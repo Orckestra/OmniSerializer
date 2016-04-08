@@ -52,10 +52,10 @@ namespace Orckestra.OmniSerializer.TypeSerializers
         private IEnumerable<FieldInfo> GetFieldInfos(Type type)
         {
             var dictType = GetDictionaryType(type);
-            var dictFields = Helpers.GetFieldInfos(dictType)
+            var dictFields = Helpers.GetFieldInfos(dictType, true)
                                     .Where(x => !(x.FieldType.IsGenericType && x.FieldType.GetGenericTypeDefinition() == typeof(IEqualityComparer<>)))
                                     .ToArray();
-            var allFields = Helpers.GetFieldInfos(type);
+            var allFields = Helpers.GetFieldInfos(type, true);
 
             var filteredFields = allFields.Except(dictFields); 
             return filteredFields;

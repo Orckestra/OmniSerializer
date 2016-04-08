@@ -44,4 +44,18 @@ namespace Orckestra.OmniSerializer.Tests.TestObjects
     {
         public Dictionary<TValue, TKey> SwitchedDictionary { get; set; }
     }
+
+    [Serializable]
+    public class StructForTestingComparer : IEqualityComparer<StructForTesting>
+    {
+        public bool Equals(StructForTesting x, StructForTesting y)
+        {
+            return x.Value == y.Value;
+        }
+
+        public int GetHashCode(StructForTesting obj)
+        {
+            return obj.Value.GetHashCode();
+        }
+    }
 }

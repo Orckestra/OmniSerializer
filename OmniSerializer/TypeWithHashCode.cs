@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Orckestra.OmniSerializer.TypeSerializers;
 
 namespace Orckestra.OmniSerializer
 {
@@ -13,8 +16,7 @@ namespace Orckestra.OmniSerializer
         {
             try
             {
-                Type = System.Type.GetType(typeName,
-                                           false);
+                Type = System.Type.GetType(SerializedTypeResolver.RevertTypeReplacements(typeName), false);
             }
             catch (FileLoadException)
             {
@@ -35,13 +37,44 @@ namespace Orckestra.OmniSerializer
         {
             if (Type != null)
             {
-                var fields = Type.GetFields()
-                                 .Select(x => x.Name + x.FieldType.AssemblyQualifiedName);
-                HashCode = String.Format("{0}{1}",
-                                         Type.AssemblyQualifiedName,
-                                         String.Join(",",
-                                                     fields))
-                                 .GetHashCode();
+                var fields = Helpers.GetFieldInfos(Type, false)
+                                    .OrderBy(f => f.Name,
+                                             StringComparer.Ordinal)
+                                    .Select(x => x.Name + x.FieldType.AssemblyQualifiedName);
+                string stringToHash = String.Format("{0}{1}",
+                                                    Type.AssemblyQualifiedName,
+                                                    String.Join(",",
+                                                                fields));
+                unchecked
+                {
+                    HashCode = 23;
+                    foreach (char c in stringToHash)
+                    {
+                        HashCode = HashCode * 31 + c;
+                    }
+                }
+            }
+        }
+        private string _shortTypeName;
+        public string ShortTypeName
+        {
+            get
+            {
+                if (_shortTypeName == null)
+                {
+                    _shortTypeName = Type.AssemblyQualifiedName;
+                    if (!Type.IsGenericType && Type.Namespace != null && Type.Namespace.StartsWith("System."))
+                    {
+                        // try to resolve the type using only the FullName
+                        var resolvedType = Type.GetType(Type.FullName);
+                        if (resolvedType != null)
+                        {
+                            _shortTypeName = Type.FullName;
+                        }
+                    }
+                    _shortTypeName = SerializedTypeResolver.ApplyTypeReplacements(_shortTypeName);
+                }
+                return _shortTypeName;
             }
         }
     }

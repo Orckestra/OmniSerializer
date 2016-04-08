@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -23,7 +24,8 @@ namespace Orckestra.OmniSerializer.Dynamic.Tests
                 var serializedData = SerializeObjectWithOneField();
                 SerializerTestHelper.ClearTypeDataMap();
 
-                using (var memoryStream = new MemoryStream(serializedData))
+                var bytes = serializedData.ToArray();
+                using (var memoryStream = new MemoryStream(bytes, 0, bytes.Length, false, true))
                 {
                     var serialiser = new Serializer();
                     var instance = (TargetClass) serialiser.Deserialize(memoryStream);

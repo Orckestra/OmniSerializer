@@ -8,7 +8,6 @@
 
 using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -60,10 +59,10 @@ namespace Orckestra.OmniSerializer.TypeSerializers
                     ReferenceTracker.Current.TrackObject(ob);
                 }
 
-                var typeHash = GetTypeFromFullName(type);
+                var typeHash = SerializedTypeResolver.GetTypeFromFullName(type);
                 Debug.Assert(typeHash != null && typeHash.Type != null);
 
-                Primitives.WritePrimitive(stream, type.AssemblyQualifiedName);  // type
+                Primitives.WritePrimitive(stream, typeHash.ShortTypeName);  // type
                 Primitives.WritePrimitive(stream, typeHash.HashCode);           // hashcode
 
                 if (ob.GetType() != typeof(object))
@@ -151,7 +150,7 @@ namespace Orckestra.OmniSerializer.TypeSerializers
                 return;
             }
 
-            var typeHash = GetTypeFromFullName(typeFullName);
+            var typeHash = SerializedTypeResolver.GetTypeFromFullName(typeFullName);
             if (typeHash == null || typeHash.Type == null)
             {
                 throw new TypeNotFoundException(typeFullName);
@@ -173,19 +172,6 @@ namespace Orckestra.OmniSerializer.TypeSerializers
                 var del = serializer.GetDeserializeTrampolineFromTypeData(data);
                 del(serializer, stream, out ob);
             }
-        }
-
-	    private static readonly ConcurrentDictionary<string, TypeWithHashCode> TypesFromString = new ConcurrentDictionary<string, TypeWithHashCode>(); 
-	    private static TypeWithHashCode GetTypeFromFullName(string typeFullName)
-	    {
-	        return TypesFromString.GetOrAdd(typeFullName,
-	                                        name => new TypeWithHashCode(name));
-	    }
-
-        private static TypeWithHashCode GetTypeFromFullName(Type type)
-        {
-            return TypesFromString.GetOrAdd(type.AssemblyQualifiedName,
-                                            name => new TypeWithHashCode(type));
         }
     }
 }
